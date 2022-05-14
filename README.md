@@ -1,0 +1,1 @@
+Simple Finance Tracker using flutter and sqlite
