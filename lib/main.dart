@@ -131,7 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> updateTransaction(Transaction transaction) async {
-    // Get a reference to the database.
+    // Get a reference to th
+    //e database.
     final db = await database;
 
     // Update the given Transaction.
@@ -156,6 +157,48 @@ class _MyHomePageState extends State<MyHomePage> {
       where: 'id = ?',
       // Pass the transaction's id as a whereArg to prevent SQL injection.
       whereArgs: [id],
+    );
+  }
+
+  Widget neumorphicTextField(String hint) {
+    return Expanded(
+      flex: 1,
+      child: Neumorphic(
+        margin: const EdgeInsets.only(right: 10, top: 10),
+
+        style: NeumorphicStyle(
+          shape: NeumorphicShape.flat,
+          boxShape: NeumorphicBoxShape.roundRect(
+            BorderRadius.circular(15),
+          ),
+          depth: -4,
+          intensity: .5,
+          lightSource: LightSource.bottomRight,
+          // color: Colors.grey[300],
+          color: Colors.white,
+        ),
+        // padding: const EdgeInsets.all(20),
+        child: Container(
+          // margin: EdgeInsets.all(20),
+          width: 100,
+          height: 15,
+          margin: const EdgeInsets.only(top: 5),
+          child: TextFormField(
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: hint,
+              hintStyle: const TextStyle(fontSize: 10, color: Colors.grey),
+            ),
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+          ),
+        ),
+        padding: const EdgeInsets.only(bottom: 10, left: 10),
+      ),
     );
   }
 
@@ -375,45 +418,11 @@ class _MyHomePageState extends State<MyHomePage> {
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
-                                    Neumorphic(
-                                      margin: const EdgeInsets.only(
-                                          right: 10, top: 10),
-
-                                      style: NeumorphicStyle(
-                                        shape: NeumorphicShape.flat,
-                                        boxShape: NeumorphicBoxShape.roundRect(
-                                          BorderRadius.circular(15),
-                                        ),
-                                        depth: -4,
-                                        intensity: .5,
-                                        lightSource: LightSource.bottomRight,
-                                        // color: Colors.grey[300],
-                                        color: Colors.white,
-                                      ),
-                                      // padding: const EdgeInsets.all(20),
-                                      child: Container(
-                                        // margin: EdgeInsets.all(20),
-                                        width: 100,
-                                        height: 20,
-                                        margin: const EdgeInsets.only(top: 5),
-                                        child: TextFormField(
-                                          decoration: const InputDecoration(
-                                            hintText: 'Category',
-                                            hintStyle: TextStyle(
-                                                fontSize: 10,
-                                                color: Colors.grey),
-                                          ),
-                                          validator: (String? value) {
-                                            if (value == null ||
-                                                value.isEmpty) {
-                                              return 'Please enter some text';
-                                            }
-                                            return null;
-                                          },
-                                        ),
-                                      ),
-                                      padding: const EdgeInsets.all(5),
-                                    ),
+                                    neumorphicTextField(
+                                        'Ex: bill, fast-food, gas'),
+                                    neumorphicTextField('Ex: Light bill'),
+                                    neumorphicTextField('Ex: \$100'),
+                                    neumorphicTextField('Ex: 05-15-2022'),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 16.0),
@@ -491,28 +500,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-
-          // Expanded(
-          //   flex: 1,
-          //   child: Neumorphic(
-          //     margin: EdgeInsets.only(right: 10),
-          //     style: NeumorphicStyle(
-          //       shape: NeumorphicShape.flat,
-          //       boxShape: NeumorphicBoxShape.roundRect(
-          //         BorderRadius.circular(12),
-          //       ),
-          //       depth: -4,
-          //       intensity: .5,
-          //       lightSource: LightSource.bottomRight,
-          //       color: Colors.grey[200],
-          //     ),
-          //     padding: const EdgeInsets.all(20),
-          //     child: Container(
-          //       width: 100,
-          //       height: 100,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
