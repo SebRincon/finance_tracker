@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import "../transactionsList.dart"
+import 'transactionsList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,6 +59,13 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState(database);
 }
 
+enum FormType {
+  category,
+  title,
+  amount,
+  date,
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   final Future<Database> database;
   _MyHomePageState(this.database);
@@ -94,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // Define a function that inserts transactions into the database
   Future<void> insertTransaction(
-    Transaction transaction,
+    UserTransaction transaction,
     Future<Database> database,
   ) async {
     // Get a reference to the database.
@@ -112,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
 // A method that retrieves all the transactions from the transactions table.
-  Future<List<Transaction>> fetchTransactions() async {
+  Future<List<UserTransaction>> fetchTransactions() async {
     // Get a reference to the database.
     final db = await database;
 
@@ -121,7 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {
-      return Transaction(
+      return UserTransaction(
         id: maps[i]['id'],
         title: maps[i]['title'],
         amount: maps[i]['amount'],
@@ -131,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  Future<void> updateTransaction(Transaction transaction) async {
+  Future<void> updateTransaction(UserTransaction transaction) async {
     // Get a reference to th
     //e database.
     final db = await database;
@@ -161,8 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
-
 //    ___       _ __   __
 //   / _ )__ __(_) /__/ /
 //  / _  / // / / / _  /
@@ -170,10 +175,51 @@ class _MyHomePageState extends State<MyHomePage> {
 
   int index = 0;
   int accountSelection = 0;
+
+  String formCategory = 'Misc';
+  String formTitle = 'Purchase';
+  String formAmount = '\$0.0';
+  String formDate = DateTime.now().toString();
+
   @override
   Widget build(BuildContext context) {
-    Future<List<Transaction>> finalTransactions = fetchTransactions();
+    Future<List<UserTransaction>> finalTransactions = fetchTransactions();
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+    void _submitOrder(
+      String formCategory,
+      String formTitle,
+      String formAmount,
+      String formDate,
+    ) {
+      if (_formKey.currentState!.validate()) {
+        setState(() {
+          _formKey.currentState!.save();
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text('$formCategory - $formTitle - $formAmount - $formDate'),
+          ),
+        );
+        setState(
+          () {
+            formCategory = 'Misc';
+            formTitle = 'Purchase';
+            formAmount = '\$0.0';
+            formDate = DateTime.now().toString();
+            _formKey.currentState!.reset();
+          },
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please fill the entire entry'),
+          ),
+        );
+      }
+    }
 
     return Scaffold(
       body: Row(
@@ -184,15 +230,16 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               children: [
                 Expanded(
-                    flex: 2,
-                    child: Container(
-                      padding: EdgeInsets.only(top: 40),
-                      child: const Text(
-                        "Dashboard",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),),
+                  flex: 2,
+                  child: Container(
+                    padding: EdgeInsets.only(top: 40),
+                    child: const Text(
+                      "Dashboard",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
                 Expanded(
                   flex: 10,
                   child: Container(
@@ -207,8 +254,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-        
-
           Expanded(
             flex: 1,
             child: Container(
@@ -217,15 +262,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 30),
-                  accountDetail()
-                  
+                  accountDetail(accountSelection),
                   const SizedBox(height: 10),
                   const Text(
                     'Transactions',
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  transactionsList()
+                  transactionsList(context, _formKey, fetchTransactions())
                 ],
               ),
             ),
@@ -242,14 +286,14 @@ class _MyHomePageState extends State<MyHomePage> {
 //    |_||_| \__,_|_||_/__/\__,_\__|\__|_\___/_||_|  \___/|_.__// \___\__|\__|
 //                                                            |__/
 
-class Transaction {
+class UserTransaction {
   final int id;
   final String title;
   final int amount;
   final String date;
   final String category;
 
-  const Transaction({
+  const UserTransaction({
     required this.id,
     required this.title,
     required this.amount,
