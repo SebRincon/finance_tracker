@@ -168,6 +168,81 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget neumorphicTextField(String hint, FormType field) {
+    return Expanded(
+      flex: 1,
+      child: Neumorphic(
+        margin: const EdgeInsets.only(right: 10, top: 10),
+
+        style: NeumorphicStyle(
+          shape: NeumorphicShape.flat,
+          boxShape: NeumorphicBoxShape.roundRect(
+            BorderRadius.circular(15),
+          ),
+          depth: -4,
+          intensity: .5,
+          lightSource: LightSource.bottomRight,
+          // color: Colors.grey[300],
+          color: Colors.white,
+        ),
+        // padding: const EdgeInsets.all(20),
+        child: Container(
+          // margin: EdgeInsets.all(20),
+          width: 100,
+          height: 15,
+          margin: const EdgeInsets.only(top: 5),
+          child: TextFormField(
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: hint,
+              hintStyle: const TextStyle(fontSize: 10, color: Colors.grey),
+            ),
+            validator: (String? value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
+            onSaved: (newValue) {
+              switch (field) {
+                case FormType.category:
+                  setState(
+                    () {
+                      formCategory = newValue!;
+                    },
+                  );
+
+                  break;
+                case FormType.title:
+                  setState(
+                    () {
+                      formTitle = newValue!;
+                    },
+                  );
+                  break;
+                case FormType.amount:
+                  setState(
+                    () {
+                      formAmount = newValue!;
+                    },
+                  );
+                  break;
+                case FormType.date:
+                  setState(
+                    () {
+                      formDate = newValue!;
+                    },
+                  );
+                  break;
+              }
+            },
+          ),
+        ),
+        padding: const EdgeInsets.only(bottom: 10, left: 10),
+      ),
+    );
+  }
+
 //    ___       _ __   __
 //   / _ )__ __(_) /__/ /
 //  / _  / // / / / _  /
@@ -240,6 +315,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
+                //
+                // SIDE BAR
+                //
                 Expanded(
                   flex: 10,
                   child: Container(
@@ -254,6 +332,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
+          //
+          // MAIN VIEW *******************
+          //
           Expanded(
             flex: 1,
             child: Container(
@@ -269,7 +350,189 @@ class _MyHomePageState extends State<MyHomePage> {
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 10),
-                  transactionsList(context, _formKey, fetchTransactions())
+
+                  //
+                  // TRANSACTIONS *******************
+                  //
+
+                  Expanded(
+                    flex: 1,
+                    child: Neumorphic(
+                        margin: const EdgeInsets.only(right: 10, bottom: 10),
+                        style: NeumorphicStyle(
+                          shape: NeumorphicShape.flat,
+                          boxShape: NeumorphicBoxShape.roundRect(
+                            BorderRadius.circular(12),
+                          ),
+                          depth: -4,
+                          intensity: .5,
+                          lightSource: LightSource.bottomRight,
+                          color: Colors.grey[200],
+                        ),
+                        padding: const EdgeInsets.all(20),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height * .65,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: const [
+                                  Expanded(
+                                    flex: 1,
+                                    child: SizedBox(
+                                      // width: 200,
+                                      child: Text(
+                                        'Category',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: SizedBox(
+                                      // width: 200,
+                                      child: Text(
+                                        'Title',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: SizedBox(
+                                      // width: 200,
+                                      child: Text(
+                                        'Amount',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: SizedBox(
+                                      // width: 200,
+                                      child: Text(
+                                        'Date',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Form(
+                                key: _formKey,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    neumorphicTextField(
+                                        'Ex: Bill, fast-food, gas',
+                                        FormType.category),
+                                    neumorphicTextField(
+                                        'Ex: Light bill', FormType.title),
+                                    neumorphicTextField(
+                                        'Ex: \$100', FormType.amount),
+                                    neumorphicTextField(
+                                        'Ex: 05-15-2022', FormType.date),
+                                    // NeumorphicButton(
+                                    //   style: NeumorphicStyle(
+                                    //     shape: NeumorphicShape.flat,
+                                    //     boxShape: NeumorphicBoxShape.roundRect(
+                                    //       BorderRadius.circular(15),
+                                    //     ),
+                                    //     depth: -4,
+                                    //     intensity: .5,
+                                    //     lightSource: LightSource.bottomRight,
+                                    //     // color: Colors.grey[300],
+                                    //     color: Colors.white,
+                                    //   ),
+                                    //   child: const Text("ADD"),
+                                    //   onPressed: () {},
+                                    // ),
+                                    Neumorphic(
+                                      margin: const EdgeInsets.only(top: 10),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          _submitOrder(formCategory, formTitle,
+                                              formAmount, formDate);
+                                        },
+                                        child: const Text('ADD',
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                        style: ElevatedButton.styleFrom(
+                                          onPrimary: Colors.black,
+                                          animationDuration: const Duration(
+                                              milliseconds: 1000),
+                                          primary: Colors.white,
+                                          shadowColor: Colors.grey[100],
+                                          elevation: 10,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Divider(),
+                              SizedBox(
+                                width: double.infinity,
+                                height:
+                                    MediaQuery.of(context).size.height * .56,
+                                child: FutureBuilder<List<Transaction>>(
+                                  future: finalTransactions,
+                                  builder: (context, snapshot) {
+                                    return ListView.builder(
+                                      itemCount: snapshot.data?.length,
+                                      itemBuilder: (context, index) {
+                                        List? _transactions = snapshot.data;
+                                        return Container(
+                                          // margin: const EdgeInsets.only(
+                                          //     top: 5, bottom: 5),
+                                          // decoration: BoxDecoration(
+                                          //   color: Colors.indigo,
+                                          //   borderRadius: BorderRadius.circular(5),
+                                          // ),
+                                          width: double.infinity,
+                                          height: 50,
+                                          child: Column(
+                                            children: [
+                                              Center(
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                          "${_transactions![index].id}"),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                          "${_transactions[index].title}"),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                          "\$${_transactions[index].amount}"),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                          "\$${_transactions[index].amount}"),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              const Divider(),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        )),
+                  ),
                 ],
               ),
             ),
