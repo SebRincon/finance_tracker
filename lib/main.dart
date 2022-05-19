@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'transactionsList.dart';
+// import 'transactionsList.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -307,7 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    padding: EdgeInsets.only(top: 40),
+                    padding: const EdgeInsets.only(top: 40),
                     child: const Text(
                       "Dashboard",
                       style:
@@ -321,11 +321,31 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(
                   flex: 10,
                   child: Container(
+                    width: 300,
                     decoration: const BoxDecoration(
                       color: Colors.blueGrey,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(50),
                       ),
+                    ),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.account_balance),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.add_chart_outlined),
+                        ),
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.settings),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -343,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 30),
-                  accountDetail(accountSelection),
+                  // accountDetail(accountSelection),
                   const SizedBox(height: 10),
                   const Text(
                     'Transactions',
@@ -433,21 +453,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                         'Ex: \$100', FormType.amount),
                                     neumorphicTextField(
                                         'Ex: 05-15-2022', FormType.date),
-                                    // NeumorphicButton(
-                                    //   style: NeumorphicStyle(
-                                    //     shape: NeumorphicShape.flat,
-                                    //     boxShape: NeumorphicBoxShape.roundRect(
-                                    //       BorderRadius.circular(15),
-                                    //     ),
-                                    //     depth: -4,
-                                    //     intensity: .5,
-                                    //     lightSource: LightSource.bottomRight,
-                                    //     // color: Colors.grey[300],
-                                    //     color: Colors.white,
-                                    //   ),
-                                    //   child: const Text("ADD"),
-                                    //   onPressed: () {},
-                                    // ),
                                     Neumorphic(
                                       margin: const EdgeInsets.only(top: 10),
                                       child: ElevatedButton(
@@ -475,8 +480,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               SizedBox(
                                 width: double.infinity,
                                 height:
-                                    MediaQuery.of(context).size.height * .56,
-                                child: FutureBuilder<List<Transaction>>(
+                                    MediaQuery.of(context).size.height * .70,
+                                child: FutureBuilder<List<UserTransaction>>(
                                   future: finalTransactions,
                                   builder: (context, snapshot) {
                                     return ListView.builder(
