@@ -3,6 +3,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 // import 'transactionsList.dart';
+import 'settings.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +40,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      routes: <String, WidgetBuilder>{
+        '/dashboard': (BuildContext context) => const SettingsPage(),
+        // '/market': (BuildContext context) => Market(auth),
+        // '/auth': (BuildContext context) => LoginPage(auth),
+      },
       home: MyHomePage(database),
     );
   }
@@ -334,7 +340,9 @@ class _MyHomePageState extends State<MyHomePage> {
                           height: 40,
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).pushNamed('/dashboard');
+                          },
                           icon: const Icon(Icons.account_balance),
                         ),
                         IconButton(
