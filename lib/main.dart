@@ -1,15 +1,11 @@
-import 'dart:async';
-import 'package:finance_tracker/widgets/TransactionsManager.dart';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:finance_tracker/pages/SettingsManager.dart';
+import 'package:finance_tracker/pages/TransactionsManager.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-// import 'transactionsList.dart';
-import 'settings.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -23,9 +19,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routes: <String, WidgetBuilder>{
-        '/dashboard': (BuildContext context) => const SettingsPage(),
-      },
+      // routes: <String, WidgetBuilder>{
+      //   '/dashboard': (BuildContext context) => const SettingsPage(),
+      // },
       home: const MyHomePage(),
     );
   }
@@ -56,6 +52,14 @@ class _MyHomePageState extends State<MyHomePage> {
   int index = 0;
   int accountSelection = 0;
 
+  void changeIndex(int _index) {
+    setState(
+      () {
+        index = _index;
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Expanded(
                   flex: 2,
                   child: Container(
-                    padding: const EdgeInsets.only(top: 40),
+                    padding: const EdgeInsets.only(top: 80),
                     child: const Text(
                       "Dashboard",
                       style:
@@ -95,19 +99,51 @@ class _MyHomePageState extends State<MyHomePage> {
                         const SizedBox(
                           height: 40,
                         ),
-                        IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pushNamed('/dashboard');
-                          },
-                          icon: const Icon(Icons.account_balance),
+
+                        Container(
+                          margin: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Dashboard',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  changeIndex(0);
+                                },
+                                icon: const Icon(Icons.account_balance),
+                              ),
+                            ],
+                          ),
                         ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.add_chart_outlined),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.settings),
+
+                        // IconButton(
+                        //   onPressed: () {
+                        //     changeIndex(1);
+                        //   },
+                        //   icon: const Icon(Icons.add_chart_outlined),
+                        // ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 10, right: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Settings',
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.bold),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  changeIndex(1);
+                                },
+                                icon: const Icon(Icons.settings),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -125,20 +161,21 @@ class _MyHomePageState extends State<MyHomePage> {
               margin: const EdgeInsets.only(left: 10, right: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  SizedBox(height: 30),
+                children: [
+                  const SizedBox(height: 30),
                   // accountDetail(accountSelection),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
-                    'Transactions',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                    index == 0 ? 'Transactions' : "Settings",
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
                   //
                   // TRANSACTIONS *******************
                   //
-                  TransactionManager()
+                  index == 0 ? TransactionManager() : SettingsManager()
                 ],
               ),
             ),

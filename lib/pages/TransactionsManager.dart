@@ -187,21 +187,26 @@ class _TransactionManagerState extends State<TransactionManager> {
   }
 
   void _submitOrder(String formCategory, String formTitle, String formAmount,
-      String formDate, BuildContext context) {
+      String formDate, BuildContext context, Future<Database> database) {
     if (_formKey.currentState!.validate()) {
       // setState(
       //   () {
       _formKey.currentState!.save();
-      print(
-          '${_transactionData["formCategory"]} - ${_transactionData["formTitle"]} - ${_transactionData["formAmount"]} - ${_transactionData["formDate"]}');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
               '${_transactionData["formCategory"]} - ${_transactionData["formTitle"]} - ${_transactionData["formAmount"]} - ${_transactionData["formDate"]}'),
         ),
       );
-      //   },
-      // );
+
+      insertTransaction(
+          UserTransaction(
+              id: DateTime.now().microsecondsSinceEpoch,
+              title: _transactionData["formTitle"]!,
+              amount: int.parse(_transactionData["formAmount"]!),
+              date: _transactionData["formDate"]!,
+              category: _transactionData["formCategory"]!),
+          database);
 
       setState(
         () {
@@ -245,7 +250,7 @@ class _TransactionManagerState extends State<TransactionManager> {
         child: Container(
           // margin: EdgeInsets.all(20),
           width: 100,
-          height: 25,
+          height: 15,
           margin: const EdgeInsets.only(top: 5),
           child: TextFormField(
             decoration: InputDecoration(
@@ -303,6 +308,7 @@ class _TransactionManagerState extends State<TransactionManager> {
   Widget build(BuildContext context) {
     Future<List<UserTransaction>> finalTransactions =
         fetchTransactions(getDatabase());
+    Future<Database> database = getDatabase();
     return Expanded(
       flex: 1,
       child: Neumorphic(
@@ -385,7 +391,8 @@ class _TransactionManagerState extends State<TransactionManager> {
                               _transactionData["formTitle"]!,
                               _transactionData["formAmount"]!,
                               _transactionData["formDate"]!,
-                              context);
+                              context,
+                              database);
                         },
                         child: const Text('ADD',
                             style: TextStyle(color: Colors.black)),
@@ -444,8 +451,8 @@ class _TransactionManagerState extends State<TransactionManager> {
                                     ),
                                     Expanded(
                                       flex: 1,
-                                      child: Text(
-                                          "\$${_transactions[index].amount}"),
+                                      child:
+                                          Text("${_transactions[index].date}"),
                                     )
                                   ],
                                 ),
