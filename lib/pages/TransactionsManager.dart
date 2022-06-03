@@ -1,6 +1,5 @@
-// ignore_for_file: prefer_final_fields
+// ignore_for_file: prefer_final_fields, file_names
 
-import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
@@ -201,7 +200,7 @@ class _TransactionManagerState extends State<TransactionManager> {
 
       insertTransaction(
           UserTransaction(
-              id: DateTime.now().microsecondsSinceEpoch,
+              id: (DateTime.now().microsecondsSinceEpoch),
               title: _transactionData["formTitle"]!,
               amount: int.parse(_transactionData["formAmount"]!),
               date: _transactionData["formDate"]!,
@@ -436,8 +435,8 @@ class _TransactionManagerState extends State<TransactionManager> {
                                   children: [
                                     Expanded(
                                       flex: 1,
-                                      child:
-                                          Text("${_transactions![index].id}"),
+                                      child: Text(
+                                          "ID: ${(_transactions![index].id).round()}"),
                                     ),
                                     Expanded(
                                       flex: 1,

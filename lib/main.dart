@@ -74,10 +74,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   flex: 2,
                   child: Container(
                     padding: const EdgeInsets.only(top: 80),
-                    child: const Text(
-                      "Dashboard",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    child: Text(
+                      index == 0 ? 'Dashboard' : "Settings",
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -99,50 +99,57 @@ class _MyHomePageState extends State<MyHomePage> {
                         const SizedBox(
                           height: 40,
                         ),
-
-                        Container(
-                          margin: const EdgeInsets.only(left: 10, right: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Dashboard',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  changeIndex(0);
-                                },
-                                icon: const Icon(Icons.account_balance),
-                              ),
-                            ],
+                        InkWell(
+                          onTap: () {
+                            changeIndex(0);
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 30,
+                            margin: const EdgeInsets.only(left: 10, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Text(
+                                  'Dashboard',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.account_balance,
+                                  color: Colors.white,
+                                )
+                              ],
+                            ),
                           ),
                         ),
-
-                        // IconButton(
-                        //   onPressed: () {
-                        //     changeIndex(1);
-                        //   },
-                        //   icon: const Icon(Icons.add_chart_outlined),
-                        // ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 10, right: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Settings',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  changeIndex(1);
-                                },
-                                icon: const Icon(Icons.settings),
-                              ),
-                            ],
+                        const SizedBox(height: 15),
+                        InkWell(
+                          onTap: () {
+                            changeIndex(1);
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            height: 30,
+                            margin: const EdgeInsets.only(left: 10, right: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: const [
+                                Text(
+                                  'Settings',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
+                                Icon(
+                                  Icons.settings,
+                                  color: Colors.white,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -162,20 +169,14 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 30),
-                  // accountDetail(accountSelection),
-                  const SizedBox(height: 10),
-                  Text(
-                    index == 0 ? 'Transactions' : "Settings",
-                    style: const TextStyle(
-                        fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
                   const SizedBox(height: 10),
 
                   //
                   // TRANSACTIONS *******************
                   //
-                  index == 0 ? TransactionManager() : SettingsManager()
+                  index == 0
+                      ? const TransactionManager()
+                      : const SettingsManager()
                 ],
               ),
             ),
